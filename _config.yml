@@ -75,7 +75,7 @@ netease_comment: false
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
 sidebar-about-description: "Yet Another Engineer<br>In search of Happiness"
-sidebar-avatar: img/sidebar.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
+sidebar-avatar: /img/sidebar.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
 
 
 
