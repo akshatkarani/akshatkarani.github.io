@@ -6,7 +6,7 @@ email: akshatkarani@gmail.com
 description: My Blog, where I write sometimes, so I can impart my vast wisdom to all of you :p
 keyword: "Akshat, Akshat Karani, Akshat Karani Blog"
 url: "https://akshatkarani.github.io"              # your host, for absolute URL
-baseurl: "/blog"                             # for example, '/blog' if your blog hosted on 'host/blog'
+baseurl: ""                             # for example, '/blog' if your blog hosted on 'host/blog'
 
 # Publish posts or collection documents with a future date.
 future: true
