@@ -1,16 +1,16 @@
 ---
 layout: default
-title: 404
-hide-in-nav: true
-description: "The page you are looking for doesn't exist"
-header-img: "img/404-bg.jpg"
+title: Page not found
 permalink: /404.html
+sitemap: false
 ---
-
-
-<!-- Page Header -->
-{% include intro-header.html type="page" short='true' %}
-
-<script>
-	document.body.classList.add('page-fullscreen');
-</script>
+<section class="not-found">
+  <p class="eyebrow">404</p>
+  <h1>Page not found</h1>
+  <p>The page you're looking for doesn't exist or has moved.</p>
+  <p>
+    <a href="{{ '/' | relative_url }}">Home</a> &middot;
+    <a href="{{ '/#writing' | relative_url }}">Writing</a> &middot;
+    <a href="{{ site.resume | relative_url }}">Resume</a>
+  </p>
+</section>
