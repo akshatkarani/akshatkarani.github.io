@@ -1,0 +1,5 @@
+# Maps the `author:` value used in post front matter to full details
+# (read by jekyll-seo-tag for meta author / twitter:creator).
+Akshat:
+  name: Akshat Karani
+  twitter: akshatkarani

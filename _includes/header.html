@@ -1,0 +1,13 @@
+<header class="site-header">
+  <div class="wrap">
+    {% if page.url == "/" %}
+    <span></span>
+    {% else %}
+    <a class="brand" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+    {% endif %}
+    <nav class="site-nav" aria-label="Main">
+      <a href="{{ '/#writing' | relative_url }}">Writing</a>
+      <a href="{{ site.resume | relative_url }}">Resume</a>
+    </nav>
+  </div>
+</header>

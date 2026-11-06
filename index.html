@@ -1,46 +1,67 @@
 ---
-layout: page
-description: "Where I write sometimes, so I can impart my vast wisdom to all of you :p"
+layout: default
 ---
-
-{% for post in paginator.posts %}
-<div class="post-preview">
-    <a href="{{ post.url | prepend: site.baseurl }}">
-        <h2 class="post-title">
-            {{ post.title }}
-        </h2>
-        {% if post.subtitle %}
-        <h3 class="post-subtitle">
-            {{ post.subtitle }}
-        </h3>
-        {% endif %}
-        <div class="post-content-preview">
-            {% if post.lang == 'en' %}
-                {{ post.content | strip_html | truncate:300 }}
-            {% else %}
-                {{ post.content | strip_html | truncate:200 }}
-            {% endif %}
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by {% if post.author %}{{ post.author }}{% else %}{{ site.title }}{% endif %} on {{ post.date | date: "%B %-d, %Y" }}
+<section class="intro">
+  <img class="avatar" src="{{ '/assets/img/avatar.jpg' | relative_url }}" width="80" height="80" alt="Akshat Karani">
+  <h1>Akshat Karani</h1>
+  <div class="bio">
+    <p class="lead">I'm an engineer on the machine learning team at <a href="https://needl.ai">Needl.ai</a>.</p>
+    <p>
+      I studied Computer Science and Engineering at IIT Dharwad, and I'm interested in machine learning,
+      algorithms, and open-source software. I got into open source through
+      <a href="https://github.com/coala/coala">coala</a>, a static-analysis framework, and worked on it as a
+      Google Summer of Code student in 2019.
     </p>
-</div>
-<hr>
-{% endfor %}
+  </div>
+  <ul class="links">
+    <li><a href="https://github.com/{{ site.contact.github }}">{% include icon.html name="github" %}GitHub</a></li>
+    <li><a href="https://www.linkedin.com/in/{{ site.contact.linkedin }}">{% include icon.html name="linkedin" %}LinkedIn</a></li>
+    <li><a href="https://x.com/{{ site.contact.x }}">{% include icon.html name="x" %}X</a></li>
+    <li><a href="mailto:{{ site.contact.email }}">{% include icon.html name="mail" %}Email</a></li>
+    <li><a href="{{ site.resume | relative_url }}">{% include icon.html name="file" %}Resume</a></li>
+  </ul>
+</section>
 
-<!-- Pager -->
-{% if paginator.total_pages > 1 %}
-<ul class="pager">
-    {% if paginator.previous_page %}
-    <li class="previous">
-        <a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">&larr; Newer Posts</a>
+<section class="section" id="writing" aria-labelledby="writing-title">
+  <h2 class="section-title" id="writing-title">Writing</h2>
+
+  {%- assign standalone = "" | split: "" -%}
+  {%- assign gsoc = "" | split: "" -%}
+  {%- for post in site.posts reversed -%}
+    {%- if post.tags contains "GSoC" -%}{%- assign gsoc = gsoc | push: post -%}{%- endif -%}
+  {%- endfor -%}
+  {%- for post in site.posts -%}
+    {%- unless post.tags contains "GSoC" -%}{%- assign standalone = standalone | push: post -%}{%- endunless -%}
+  {%- endfor -%}
+  {% if standalone.size > 0 %}
+  <ol class="post-list">
+    {% for post in standalone %}
+    <li>
+      <a href="{{ post.url | relative_url }}">
+        <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%b %-d, %Y" }}</time>
+        <span class="title">{{ post.title }}</span>
+      </a>
     </li>
-    {% endif %}
-    {% if paginator.next_page %}
-    <li class="next">
-        <a href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">Older Posts &rarr;</a>
-    </li>
-    {% endif %}
-</ul>
-{% endif %}
+    {% endfor %}
+  </ol>
+  {% endif %}
+
+  <div class="series">
+    <h3>Google Summer of Code 2019 &middot; coala</h3>
+    <p>
+      An eight-part log of my GSoC project with coala: reworking its action system so that analysis
+      plugins (&ldquo;bears&rdquo;) can define their own fixes and suggest multiple alternative patches.
+      <a href="https://github.com/coala/projects/blob/master/_reports/akshatkarani.md">Final report</a>.
+    </p>
+    <ol class="post-list">
+      {% for post in gsoc %}
+      <li>
+        <a href="{{ post.url | relative_url }}">
+          <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%b %-d, %Y" }}</time>
+          <span class="title">{{ post.title }}</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ol>
+  </div>
+</section>
