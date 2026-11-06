@@ -4,13 +4,13 @@ layout: default
 <section class="intro">
   <img class="avatar" src="{{ '/assets/img/avatar.jpg' | relative_url }}" width="80" height="80" alt="Akshat Karani">
   <h1>Akshat Karani</h1>
+  <p class="eyebrow">Senior ML Engineer &middot; Needl.ai &middot; Mumbai</p>
   <div class="bio">
-    <p class="lead">I'm an engineer on the machine learning team at <a href="https://needl.ai">Needl.ai</a>.</p>
+    <p class="lead">I'm a Senior ML Engineer at <a href="https://needl.ai">Needl.ai</a>, where I build and own <span class="grad">the agent platform and the LLM layer</span> behind AskNeedl, Needl's answer engine for financial and enterprise data.</p>
     <p>
-      I studied Computer Science and Engineering at IIT Dharwad, and I'm interested in machine learning,
-      algorithms, and open-source software. I got into open source through
-      <a href="https://github.com/coala/coala">coala</a>, a static-analysis framework, and worked on it as a
-      Google Summer of Code student in 2019.
+      Over five years at Needl I've built every layer an answer passes through, from the connectors that bring
+      documents in to the agents that now do the answering. These days I spend most of my time on agent
+      harnesses, context engineering and evals, and on making an engineering team work well with AI coding agents.
     </p>
   </div>
   <ul class="links">
@@ -18,8 +18,91 @@ layout: default
     <li><a href="https://www.linkedin.com/in/{{ site.contact.linkedin }}">{% include icon.html name="linkedin" %}LinkedIn</a></li>
     <li><a href="https://x.com/{{ site.contact.x }}">{% include icon.html name="x" %}X</a></li>
     <li><a href="mailto:{{ site.contact.email }}">{% include icon.html name="mail" %}Email</a></li>
-    <li><a href="{{ site.resume | relative_url }}">{% include icon.html name="file" %}Resume</a></li>
   </ul>
+</section>
+
+<section class="section journey" id="journey" aria-labelledby="journey-title">
+  <h2 class="section-title" id="journey-title">Journey</h2>
+  <p class="journey-lede">
+    Five years at Needl, one stack. I've built, in order, every layer a question passes through on its way to
+    an answer. Pick a year, or a layer, to see what existed then and what I was building.
+  </p>
+
+  <input class="year" type="radio" name="year" id="y2021" aria-label="2021, Data Engineer">
+  <input class="year" type="radio" name="year" id="y2022" aria-label="2022, ML Engineer">
+  <input class="year" type="radio" name="year" id="y2023" aria-label="2023">
+  <input class="year" type="radio" name="year" id="y2024" aria-label="2024, Senior ML Engineer">
+  <input class="year" type="radio" name="year" id="ynow" aria-label="2025 to now" checked>
+
+  <div class="scrubber">
+    <span class="rail" aria-hidden="true"><span class="fill"></span></span>
+    <label for="y2021"><span class="dot"></span><span class="yr">2021</span><span class="role">Data Engineer</span></label>
+    <label for="y2022"><span class="dot"></span><span class="yr">2022</span><span class="role">ML Engineer</span></label>
+    <label for="y2023"><span class="dot"></span><span class="yr">2023</span><span class="role"></span></label>
+    <label for="y2024"><span class="dot"></span><span class="yr">2024</span><span class="role">Senior ML Engineer</span></label>
+    <label for="ynow"><span class="dot"></span><span class="yr">now</span><span class="role"></span></label>
+  </div>
+
+  <div class="journey-body">
+    <ol class="stack" aria-label="The layers a question passes through, newest on top; each opens its year">
+      <li class="layer l5"><label for="ynow"><span class="n">5</span><span class="name">Agents</span><span class="sub">harness, LLM layer, evals</span></label></li>
+      <li class="layer l4"><label for="y2024"><span class="n">4</span><span class="name">Answers</span><span class="sub">AskNeedl, retrieval to generation</span></label></li>
+      <li class="layer l3"><label for="y2023"><span class="n">3</span><span class="name">Document AI</span><span class="sub">query understanding, summaries</span></label></li>
+      <li class="layer l2"><label for="y2022"><span class="n">2</span><span class="name">Search</span><span class="sub">Elasticsearch over filings, calls</span></label></li>
+      <li class="layer l1"><label for="y2021"><span class="n">1</span><span class="name">Connectors</span><span class="sub">mail, drives, chat, the web</span></label></li>
+    </ol>
+
+    <div class="captions">
+      <article class="cap c2021">
+        <h3>Connectors <span class="meta">2021 &middot; Data Engineer</span></h3>
+        <p>
+          I joined Needl on the data side. The platform pulls in mail, drives, chat and the public web; I built the
+          Microsoft Teams integration, a public-source crawler and the RSS pipeline, then hardened the Gmail, Google
+          Drive, Outlook and Telegram connectors with resumable state, throttling and backoff.
+        </p>
+        <p>Every answer starts here. If the document never arrives, nothing downstream matters.</p>
+      </article>
+      <article class="cap c2022">
+        <h3>Search <span class="meta">2022 &middot; ML Engineer</span></h3>
+        <p>
+          I took over Needl's Elasticsearch search. First the search API moved from Node.js to Python; then proximity
+          search, synonym and ticker expansion, spell correction, highlighting and multi-index querying over filings,
+          earnings calls and regulator data, with a regression framework that checks results against golden responses.
+        </p>
+      </article>
+      <article class="cap c2023">
+        <h3>Document AI <span class="meta">2023 &middot; ML Engineer</span></h3>
+        <p>
+          The system learned to read. I added LLM-based query understanding (which companies, sources and dates a
+          question is about), earnings-call summarization with sentence-level references mapped to PDF bounding boxes,
+          the job service and table extraction behind it, and near-duplicate detection for news.
+        </p>
+      </article>
+      <article class="cap c2024">
+        <h3>Answers <span class="meta">2024 &middot; Senior ML Engineer from Aug</span></h3>
+        <p>
+          I joined AskNeedl, Needl's answer engine, and became its primary engineer: rebuilt the pipeline on Haystack,
+          fine-tuned cross-encoder rerankers as the context filter, gated every model and prompt change on benchmarks,
+          added web search and an answer-quality signal, and built its first multi-step agentic mode.
+        </p>
+      </article>
+      <article class="cap cnow">
+        <h3>Agents <span class="meta">2025&ndash;now &middot; Senior ML Engineer</span></h3>
+        <p>
+          I turned the answer pipeline into Needl's agent platform: config-driven agents over a shared tool registry,
+          skills that load context only when needed, tool-call budgets, per-fragment citations, an eval framework with
+          LLM graders, and Langfuse tracing. Alongside it, the shared LLM layer over OpenAI, Azure OpenAI, Gemini and
+          Claude, and text-to-SQL agents with input guards and read-only SQL safety.
+        </p>
+        <p>One loop now runs sub-minute chat and twenty-minute due-diligence reports.</p>
+      </article>
+    </div>
+  </div>
+
+  <p class="journey-foot">
+    Before Needl: a B.Tech in Computer Science at IIT Dharwad (2017&ndash;2021) and Google Summer of Code 2019 with
+    <a href="https://github.com/coala/coala">coala</a>, which is where the writing below starts.
+  </p>
 </section>
 
 <section class="section" id="writing" aria-labelledby="writing-title">

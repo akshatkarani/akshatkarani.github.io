@@ -7,11 +7,10 @@ JavaScript, built and deployed by GitHub Pages from the `master` branch.
 
 | Path                    | What it is                                         |
 | ----------------------- | -------------------------------------------------- |
-| `index.html`            | Home page: intro, links, list of posts             |
+| `index.html`            | Home page: intro, links, journey timeline, list of posts |
 | `_posts/`               | Blog posts (Markdown)                              |
 | `_layouts/`, `_includes/` | Page templates                                   |
 | `assets/css/main.css`   | All styles (light + dark via `prefers-color-scheme`) |
-| `resume.pdf`            | Resume, linked from the nav and home page          |
 | `_config.yml`           | Site metadata and contact links                    |
 
 ## Writing a post
