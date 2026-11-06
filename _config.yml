@@ -4,19 +4,11 @@
 title: Akshat Karani
 tagline: Senior ML Engineer at Needl.ai
 description: >-
-  Akshat Karani is a Senior ML Engineer at Needl.ai, where he builds and owns the agent platform
-  and the LLM layer behind AskNeedl. Writing on LLM agents, search, open source and
-  Google Summer of Code.
+  Akshat Karani is a Senior ML Engineer at Needl.ai, where he builds and owns the agent platform and the LLM layer behind AskNeedl. Writing on LLM agents, open source and Google Summer of Code.
 url: https://akshatkarani.github.io
 baseurl: ""
 lang: en_US
 
-# Used by the templates (home page links, footer).
-contact:
-  email: akshatkarani@gmail.com
-  github: akshatkarani
-  linkedin: akshat-karani
-  x: akshatkarani
 
 # ---------------------------------------------------------------------------
 # jekyll-seo-tag / jekyll-feed

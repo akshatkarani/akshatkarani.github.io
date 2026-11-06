@@ -1,12 +1,13 @@
 ---
 layout: default
 ---
+{% assign p = site.data.profile %}
 <section class="intro">
-  <img class="avatar" src="{{ '/assets/img/avatar.jpg' | relative_url }}" width="80" height="80" alt="Akshat Karani">
-  <h1>Akshat Karani</h1>
-  <p class="eyebrow">Senior ML Engineer &middot; Needl.ai &middot; Mumbai</p>
+  <img class="avatar" src="{{ '/assets/img/avatar.jpg' | relative_url }}" width="80" height="80" alt="{{ p.name }}">
+  <h1>{{ p.name }}</h1>
+  <p class="eyebrow">{{ p.title }} &middot; {{ p.company }} &middot; {{ p.city }}</p>
   <div class="bio">
-    <p class="lead">I'm a Senior ML Engineer at <a href="https://needl.ai">Needl.ai</a>, where I build and own <span class="grad">the agent platform and the LLM layer</span> behind AskNeedl, Needl's answer engine for financial and enterprise data.</p>
+    <p class="lead">I'm a {{ p.title }} at <a href="{{ p.company_url }}">{{ p.company }}</a>, where {{ p.pitch_html }}</p>
     <p>
       Over five years at Needl I've built every layer an answer passes through, from the connectors that bring
       documents in to the agents that now do the answering. These days I spend most of my time on agent
@@ -14,10 +15,10 @@ layout: default
     </p>
   </div>
   <ul class="links">
-    <li><a href="https://github.com/{{ site.contact.github }}">{% include icon.html name="github" %}GitHub</a></li>
-    <li><a href="https://www.linkedin.com/in/{{ site.contact.linkedin }}">{% include icon.html name="linkedin" %}LinkedIn</a></li>
-    <li><a href="https://x.com/{{ site.contact.x }}">{% include icon.html name="x" %}X</a></li>
-    <li><a href="mailto:{{ site.contact.email }}">{% include icon.html name="mail" %}Email</a></li>
+    <li><a href="https://github.com/{{ p.github }}">{% include icon.html name="github" %}GitHub</a></li>
+    <li><a href="https://www.linkedin.com/in/{{ p.linkedin }}">{% include icon.html name="linkedin" %}LinkedIn</a></li>
+    <li><a href="https://x.com/{{ p.x }}">{% include icon.html name="x" %}X</a></li>
+    <li><a href="mailto:{{ p.email }}">{% include icon.html name="mail" %}Email</a></li>
   </ul>
 </section>
 
