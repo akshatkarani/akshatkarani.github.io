@@ -440,7 +440,7 @@ h1, h2, h3 { color: var(--fg); font-weight: 600; }
   margin: 0 0 1.5rem;
   padding: 1.1rem .25rem .9rem;
   border-radius: var(--radius);
-  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
   border: 1px solid var(--border);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
@@ -720,7 +720,9 @@ h1, h2, h3 { color: var(--fg); font-weight: 600; }
 @media (max-width: 38rem) {
   .scrubber { display: grid; }
   .journey-body { grid-template-columns: 1fr; gap: 1rem; }
-  .stack { position: static; }
+  .stack { position: relative; top: auto; }
+  .layer a { min-height: 3rem; padding: .5rem .8rem; }
+  .layer .sub { font-size: .72rem; }
   .scrubber { top: 4rem; padding: .9rem .1rem .7rem; }
   .scrubber .role { display: none; }
   .panel { scroll-margin-top: 8rem; }
