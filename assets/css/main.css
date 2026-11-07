@@ -424,155 +424,70 @@ h1, h2, h3 { color: var(--fg); font-weight: 600; }
 }
 
 /* ==========================================================================
-   Journey: scroll-driven. Each panel owns a view timeline; the sticky stack and the
-   year strip animate against those timelines. No JavaScript.
+   Journey: one column, newest first, every entry open. Scrolling moves the focus: an entry
+   lights up once its header crosses the reading line and settles once the next one does.
+   Scroll-driven CSS only, no height changes, no JavaScript.
    ========================================================================== */
-.journey { timeline-scope: --p2017, --p2019, --p2021, --p2022, --p2023, --p2024, --pnow; }
-.journey-lede { margin: 0 0 1.5rem; max-width: 40rem; color: var(--muted); }
+.journey { timeline-scope: --enow, --e2024, --e2023, --e2022, --e2021, --e2019, --e2017; }
+.journey-lede { margin: 0 0 1.75rem; max-width: 40rem; color: var(--muted); }
 
-/* year strip: sticky under the header */
-.scrubber {
-  position: sticky;
-  top: 4.4rem;
-  z-index: 3;
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  margin: 0 0 1.5rem;
-  padding: 1.1rem .25rem .9rem;
-  border-radius: var(--radius);
-  background: color-mix(in srgb, var(--bg) 92%, transparent);
-  border: 1px solid var(--border);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-}
-.scrubber .rail {
-  position: absolute; left: calc(100% / 14); right: calc(100% / 14); top: calc(1.1rem + 8px); height: 2px;
+.tl { position: relative; margin: 0; padding: 0 0 0 4.9rem; list-style: none; }
+.tl::before {
+  content: ""; position: absolute; left: 3.75rem; top: 1.4rem; bottom: 1.4rem; width: 2px;
   background: var(--border-2); border-radius: 2px;
 }
-.scrubber .seg {
-  position: absolute; top: 0; height: 100%;
-  width: calc(100% / 6);
-  background: linear-gradient(90deg, var(--accent), var(--accent-2));
-  box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 55%, transparent);
-  transform-origin: left center;
-  transform: scaleX(1);
+.entry { position: relative; margin: 0 0 1rem; scroll-margin-top: calc(40vh - 4.5rem); }
+.entry .yr {
+  position: absolute; right: calc(100% + 1.9rem); top: 1.15rem;
+  font: 500 .76rem/1 var(--font-mono); font-variant-numeric: tabular-nums; color: var(--muted);
+  text-decoration: none; white-space: nowrap;
 }
-.scrubber .seg1 { left: calc(100% / 6 * 0); }
-.scrubber .seg2 { left: calc(100% / 6 * 1); }
-.scrubber .seg3 { left: calc(100% / 6 * 2); }
-.scrubber .seg4 { left: calc(100% / 6 * 3); }
-.scrubber .seg5 { left: calc(100% / 6 * 4); }
-.scrubber .seg6 { left: calc(100% / 6 * 5); }
-
-.scrubber .pt {
-  position: relative; display: flex; flex-direction: column; align-items: center; gap: .4rem;
-  min-width: 0; padding: 0 .15rem; text-decoration: none; text-align: center;
+.entry .yr:hover { color: var(--fg); }
+.entry::before {
+  content: ""; position: absolute; left: calc(-1.15rem - 1px - 7px); top: calc(1.15rem - 3px);
+  width: 14px; height: 14px; border-radius: 50%;
+  border: 2px solid var(--border-2); background: var(--bg-2); z-index: 1;
 }
-.scrubber .dot {
-  width: 16px; height: 16px; border-radius: 50%;
-  border: 2px solid var(--border-2); background: var(--bg-2);
-  transition: border-color .2s var(--ease);
-}
-.scrubber .pt:hover .dot { border-color: var(--accent); }
-.scrubber .yr { font: 500 .85rem/1 var(--font-mono); font-variant-numeric: tabular-nums; color: var(--muted); }
-.scrubber .role { font-size: .7rem; line-height: 1.2; color: var(--muted); min-height: 1.2em; overflow-wrap: anywhere; }
-
-/* stack + panels */
-.journey-body {
-  display: grid;
-  grid-template-columns: 20.25rem 1fr;
-  gap: 1.5rem;
-  align-items: start;
-}
-.stack {
-  --g: .55rem;
-  position: sticky;
-  top: 11rem;
-  display: grid;
-  gap: var(--g);
-  margin: 0;
-  padding: 0 0 0 5.2rem;
-  list-style: none;
-}
-.stack::before {
-  content: ""; position: absolute; left: 4.05rem; top: .7rem; bottom: .7rem; width: 2px;
-  background: var(--border-2); border-radius: 2px;
-}
-.layer {
-  position: relative;
-  border: 1px dashed var(--border-2);
-  border-radius: var(--radius-sm);
-  color: var(--muted);
-  opacity: .7;
-}
-.layer a {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  grid-template-rows: auto auto;
-  column-gap: .7rem;
-  align-content: center;
-  min-height: 3.5rem;
-  min-width: 0;
-  padding: .65rem .95rem;
-  color: inherit;
-  text-decoration: none;
-}
-.layer:hover { opacity: 1; border-color: color-mix(in srgb, var(--accent) 55%, var(--border-2)); }
-.layer .yr {
-  position: absolute; right: calc(100% + 1.95rem); top: 50%; transform: translateY(-50%); white-space: nowrap;
-  text-align: right; font: 500 .74rem/1 var(--font-mono); font-variant-numeric: tabular-nums; color: var(--muted);
-}
-.layer:not(.l0)::after {
-  content: ""; position: absolute; left: calc(-1.15rem - 1px); top: 50%; width: 2px;
-  height: calc(100% + var(--g)); transform-origin: top; transform: scaleY(0);
+.entry::after {
+  content: ""; position: absolute; left: calc(-1.15rem - 1px); top: calc(1.15rem + 4px); width: 2px;
+  height: calc(100% + 1rem - 7px); transform-origin: top; transform: scaleY(0);
   background: linear-gradient(180deg, var(--accent), var(--accent-2));
   box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 55%, transparent);
 }
-.layer .n { grid-row: 1 / span 2; align-self: center; font: 500 .72rem/1 var(--font-mono); color: var(--muted); }
-.layer .name { font-size: .95rem; font-weight: 600; line-height: 1.2; color: inherit; }
-.layer .sub { font-size: .76rem; line-height: 1.3; min-width: 0; margin-top: .1rem; }
-.l0 { margin-top: .35rem; }
-.layer.built, .l0 {
-  opacity: 1; border-style: solid; border-color: var(--border); background: var(--surface); color: var(--text);
-}
-.layer.built .name, .l0 .name { color: var(--fg); }
+.entry:last-child::after { display: none; }
 
-.panels { display: grid; gap: 2.5rem; }
-.panel {
-  position: relative;
-  padding: 1.4rem 1.5rem 1.5rem;
+.entry-card {
+  border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--surface);
-  border: 1px solid var(--border);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  overflow: hidden;
-  scroll-margin-top: 11rem;
 }
-.panel::before {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--accent), var(--accent-2), transparent);
+.entry-head {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  column-gap: .8rem;
+  padding: .85rem 1.1rem .5rem;
 }
-.panel h3 { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .6rem; margin: 0 0 .4rem; font-size: 1.2rem; letter-spacing: -.02em; }
-.panel .meta {
-  display: inline-block;
+.entry-title { min-width: 0; }
+.entry-title h3 { margin: 0; font-size: 1.05rem; letter-spacing: -.015em; line-height: 1.2; }
+.entry-title h3 a { color: inherit; text-decoration: none; }
+.entry-title h3 a:hover { color: var(--accent); }
+.entry-title .sub { display: block; margin-top: .1rem; font-size: .78rem; line-height: 1.3; color: var(--muted); }
+.entry-head .meta {
   max-width: 100%;
-  margin: 0;
   padding: .25rem .6rem;
   border-radius: 999px;
-  font: 500 .72rem/1.5 var(--font-mono);
+  font: 500 .7rem/1.5 var(--font-mono);
   letter-spacing: .02em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   color: var(--accent);
   background: color-mix(in srgb, var(--accent) 12%, transparent);
 }
-.cap-tag { margin: 0 0 .8rem; color: var(--muted); font-size: .92rem; }
-.cap-list { margin: 0; padding: 0; list-style: none; display: grid; gap: .5rem; }
+.entry-inner { padding: 0 1.1rem 1.1rem; }
+.cap-tag { margin: 0 0 .7rem; color: var(--muted); font-size: .92rem; }
+.cap-list { margin: 0; padding: 0; list-style: none; display: grid; gap: .45rem; }
 .cap-list li { position: relative; padding-left: 1.05rem; font-size: .92rem; line-height: 1.45; }
 .cap-list li::before {
   content: ""; position: absolute; left: 0; top: .58em;
@@ -581,151 +496,94 @@ h1, h2, h3 { color: var(--fg); font-weight: 600; }
 }
 .cap-list strong { color: var(--fg); font-weight: 600; }
 
-/* ---- scroll-driven state (progressive enhancement) ----
-   The page starts at "now" and scrolls back in time: a layer is built before its year's
-   panel, highlighted while that panel is centred, and comes apart after it. */
 @supports (animation-timeline: view()) {
-  #pnow { view-timeline-name: --pnow; view-timeline-axis: block; }
-  #p2024 { view-timeline-name: --p2024; view-timeline-axis: block; }
-  #p2023 { view-timeline-name: --p2023; view-timeline-axis: block; }
-  #p2022 { view-timeline-name: --p2022; view-timeline-axis: block; }
-  #p2021 { view-timeline-name: --p2021; view-timeline-axis: block; }
-  #p2019 { view-timeline-name: --p2019; view-timeline-axis: block; }
-  #p2017 { view-timeline-name: --p2017; view-timeline-axis: block; }
+  .enow .entry-head { view-timeline-name: --enow; view-timeline-axis: block; }
+  .e2024 .entry-head { view-timeline-name: --e2024; view-timeline-axis: block; }
+  .e2023 .entry-head { view-timeline-name: --e2023; view-timeline-axis: block; }
+  .e2022 .entry-head { view-timeline-name: --e2022; view-timeline-axis: block; }
+  .e2021 .entry-head { view-timeline-name: --e2021; view-timeline-axis: block; }
+  .e2019 .entry-head { view-timeline-name: --e2019; view-timeline-axis: block; }
+  .e2017 .entry-head { view-timeline-name: --e2017; view-timeline-axis: block; }
 
-  .panel { min-height: 42vh; }
-  .panels { padding-bottom: 20vh; }
+  .tl { padding-bottom: 10vh; }
 
-  @keyframes layer-state {
-    0%, 37% { opacity: 1; border-style: solid; border-color: var(--border); background: var(--surface); color: var(--text); box-shadow: none; transform: none; }
-    38%, 62% { opacity: 1; border-style: solid; border-color: transparent;
+  /* own timeline: ahead -> lit when the header crosses the line. next entry's timeline (fill
+     forwards only): stays lit until the next header crosses, then settles. */
+  @keyframes card-own  { 0%, 55% { opacity: .45; border-color: var(--border); background: var(--surface); box-shadow: none; } 55%, 100% { opacity: 1; border-color: transparent;
       background: linear-gradient(var(--bg-2), var(--bg-2)) padding-box, linear-gradient(135deg, var(--accent), var(--accent-2)) border-box;
-      box-shadow: 0 12px 30px -16px var(--glow), 0 0 0 1px color-mix(in srgb, var(--accent) 25%, transparent);
-      transform: translateX(3px); color: var(--text); }
-    63%, 100% { opacity: .7; border-style: dashed; border-color: var(--border-2); background: var(--bg); color: var(--muted); box-shadow: none; transform: none; }
-  }
-  @keyframes layer-name { 0%, 62% { color: var(--fg); } 63%, 100% { color: var(--muted); } }
-  @keyframes layer-n { 0%, 37%, 63%, 100% { color: var(--muted); } 38%, 62% { color: var(--accent); } }
-  @keyframes base-state {
-    0%, 37%, 63%, 100% { opacity: 1; border-style: solid; border-color: var(--border); background: var(--surface); color: var(--text); box-shadow: none; transform: none; }
-    38%, 62% { opacity: 1; border-style: solid; border-color: transparent;
+      box-shadow: 0 16px 40px -20px var(--glow), 0 0 0 1px color-mix(in srgb, var(--accent) 25%, transparent); } }
+  @keyframes card-next { 0%, 55% { opacity: 1; border-color: transparent;
       background: linear-gradient(var(--bg-2), var(--bg-2)) padding-box, linear-gradient(135deg, var(--accent), var(--accent-2)) border-box;
-      box-shadow: 0 12px 30px -16px var(--glow), 0 0 0 1px color-mix(in srgb, var(--accent) 25%, transparent);
-      transform: translateX(3px); color: var(--text); }
-  }
-  @keyframes probe { 0%, 37%, 63%, 100% { opacity: 0; transform: scale(.3); } 38%, 62% { opacity: 1; transform: none; } }
-  @keyframes dot-state {
-    0%, 37% { border-color: var(--border-2); background: var(--bg-2); transform: none; box-shadow: none; }
-    38%, 62% { transform: scale(1.25); background: linear-gradient(135deg, var(--accent), var(--accent-2)); border-color: transparent;
-               box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 22%, transparent), 0 0 18px var(--glow); }
-    63%, 100% { border-color: var(--accent); background: var(--accent); transform: none; box-shadow: none; }
-  }
-  @keyframes yr-active { 0%, 37%, 63%, 100% { color: var(--muted); } 38%, 62% { color: var(--fg); } }
-  @keyframes seg-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-  @keyframes panel-focus { 0%, 100% { opacity: .55; } 30%, 70% { opacity: 1; } }
+      box-shadow: 0 16px 40px -20px var(--glow), 0 0 0 1px color-mix(in srgb, var(--accent) 25%, transparent); } 55%, 100% { opacity: .78; border-color: var(--border); background: var(--surface); box-shadow: none; } }
+  @keyframes dot-own   { 0%, 55% { border-color: var(--border-2); background: var(--bg-2); transform: none; box-shadow: none; } 55%, 100% { transform: scale(1.25); background: linear-gradient(135deg, var(--accent), var(--accent-2)); border-color: transparent;
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 22%, transparent), 0 0 18px var(--glow); } }
+  @keyframes dot-next  { 0%, 55% { transform: scale(1.25); background: linear-gradient(135deg, var(--accent), var(--accent-2)); border-color: transparent;
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 22%, transparent), 0 0 18px var(--glow); } 55%, 100% { border-color: var(--accent); background: var(--accent); transform: none; box-shadow: none; } }
+  @keyframes yr-own    { 0%, 55% { color: var(--muted); } 55%, 100% { color: var(--fg); } }
+  @keyframes yr-next   { 0%, 55% { color: var(--fg); } 55%, 100% { color: var(--muted); } }
+  @keyframes seg-next  { 0%, 48% { transform: scaleY(0); } 55%, 100% { transform: scaleY(1); } }
 
-  .l5 { animation: layer-state linear both; animation-timeline: --pnow; animation-range: cover 0% cover 100%; }
-  .l5 .name { animation: layer-name linear both; animation-timeline: --pnow; animation-range: cover 0% cover 100%; }
-  .l5 .n { animation: layer-n linear both; animation-timeline: --pnow; animation-range: cover 0% cover 100%; }
-  .l4 { animation: layer-state linear both; animation-timeline: --p2024; animation-range: cover 0% cover 100%; }
-  .l4 .name { animation: layer-name linear both; animation-timeline: --p2024; animation-range: cover 0% cover 100%; }
-  .l4 .n { animation: layer-n linear both; animation-timeline: --p2024; animation-range: cover 0% cover 100%; }
-  .l3 { animation: layer-state linear both; animation-timeline: --p2023; animation-range: cover 0% cover 100%; }
-  .l3 .name { animation: layer-name linear both; animation-timeline: --p2023; animation-range: cover 0% cover 100%; }
-  .l3 .n { animation: layer-n linear both; animation-timeline: --p2023; animation-range: cover 0% cover 100%; }
-  .l2 { animation: layer-state linear both; animation-timeline: --p2022; animation-range: cover 0% cover 100%; }
-  .l2 .name { animation: layer-name linear both; animation-timeline: --p2022; animation-range: cover 0% cover 100%; }
-  .l2 .n { animation: layer-n linear both; animation-timeline: --p2022; animation-range: cover 0% cover 100%; }
-  .l1 { animation: layer-state linear both; animation-timeline: --p2021; animation-range: cover 0% cover 100%; }
-  .l1 .name { animation: layer-name linear both; animation-timeline: --p2021; animation-range: cover 0% cover 100%; }
-  .l1 .n { animation: layer-n linear both; animation-timeline: --p2021; animation-range: cover 0% cover 100%; }
+  .enow .entry-card { animation: card-own linear both; animation-timeline: --enow; animation-range: cover 0% cover 100%; }
+  .enow::before { animation: dot-own linear both; animation-timeline: --enow; animation-range: cover 0% cover 100%; }
+  .enow .yr { animation: yr-own linear both; animation-timeline: --enow; animation-range: cover 0% cover 100%; }
+  .e2024 .entry-card { animation: card-own linear both; animation-timeline: --e2024; animation-range: cover 0% cover 100%; }
+  .e2024::before { animation: dot-own linear both; animation-timeline: --e2024; animation-range: cover 0% cover 100%; }
+  .e2024 .yr { animation: yr-own linear both; animation-timeline: --e2024; animation-range: cover 0% cover 100%; }
+  .e2023 .entry-card { animation: card-own linear both; animation-timeline: --e2023; animation-range: cover 0% cover 100%; }
+  .e2023::before { animation: dot-own linear both; animation-timeline: --e2023; animation-range: cover 0% cover 100%; }
+  .e2023 .yr { animation: yr-own linear both; animation-timeline: --e2023; animation-range: cover 0% cover 100%; }
+  .e2022 .entry-card { animation: card-own linear both; animation-timeline: --e2022; animation-range: cover 0% cover 100%; }
+  .e2022::before { animation: dot-own linear both; animation-timeline: --e2022; animation-range: cover 0% cover 100%; }
+  .e2022 .yr { animation: yr-own linear both; animation-timeline: --e2022; animation-range: cover 0% cover 100%; }
+  .e2021 .entry-card { animation: card-own linear both; animation-timeline: --e2021; animation-range: cover 0% cover 100%; }
+  .e2021::before { animation: dot-own linear both; animation-timeline: --e2021; animation-range: cover 0% cover 100%; }
+  .e2021 .yr { animation: yr-own linear both; animation-timeline: --e2021; animation-range: cover 0% cover 100%; }
+  .e2019 .entry-card { animation: card-own linear both; animation-timeline: --e2019; animation-range: cover 0% cover 100%; }
+  .e2019::before { animation: dot-own linear both; animation-timeline: --e2019; animation-range: cover 0% cover 100%; }
+  .e2019 .yr { animation: yr-own linear both; animation-timeline: --e2019; animation-range: cover 0% cover 100%; }
+  .e2017 .entry-card { animation: card-own linear both; animation-timeline: --e2017; animation-range: cover 0% cover 100%; }
+  .e2017::before { animation: dot-own linear both; animation-timeline: --e2017; animation-range: cover 0% cover 100%; }
+  .e2017 .yr { animation: yr-own linear both; animation-timeline: --e2017; animation-range: cover 0% cover 100%; }
 
-  .l0 { animation: base-state linear both, base-state linear both; animation-timeline: --p2019, --p2017; animation-range: cover 0% cover 100%, cover 0% cover 100%; }
-  .l0 .n { animation: layer-n linear both, layer-n linear both; animation-timeline: --p2019, --p2017; animation-range: cover 0% cover 100%, cover 0% cover 100%; }
-
-  .layer::before {
-    content: "";
-    position: absolute;
-    left: calc(-1.15rem - 1px - 7px);
-    top: 50%;
-    width: 14px; height: 14px; margin-top: -7px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 22%, transparent), 0 0 18px var(--glow);
-    opacity: 0;
-    animation: probe linear both;
-    animation-range: cover 0% cover 100%;
-  }
-  .l5::before { animation-timeline: --pnow; }
-  .l4::before { animation-timeline: --p2024; }
-  .l3::before { animation-timeline: --p2023; }
-  .l2::before { animation-timeline: --p2022; }
-  .l1::before { animation-timeline: --p2021; }
-
-  .l0::before { animation: probe linear both, probe linear both; animation-timeline: --p2019, --p2017; animation-range: cover 0% cover 100%, cover 0% cover 100%; }
-
-  /* year strip: now on the left, the rail fills towards 2017 as you scroll back */
-  .pt1 .dot { animation: dot-state linear both; animation-timeline: --pnow; animation-range: cover 0% cover 100%; }
-  .pt1 .yr { animation: yr-active linear both; animation-timeline: --pnow; animation-range: cover 0% cover 100%; }
-  .pt2 .dot { animation: dot-state linear both; animation-timeline: --p2024; animation-range: cover 0% cover 100%; }
-  .pt2 .yr { animation: yr-active linear both; animation-timeline: --p2024; animation-range: cover 0% cover 100%; }
-  .pt3 .dot { animation: dot-state linear both; animation-timeline: --p2023; animation-range: cover 0% cover 100%; }
-  .pt3 .yr { animation: yr-active linear both; animation-timeline: --p2023; animation-range: cover 0% cover 100%; }
-  .pt4 .dot { animation: dot-state linear both; animation-timeline: --p2022; animation-range: cover 0% cover 100%; }
-  .pt4 .yr { animation: yr-active linear both; animation-timeline: --p2022; animation-range: cover 0% cover 100%; }
-  .pt5 .dot { animation: dot-state linear both; animation-timeline: --p2021; animation-range: cover 0% cover 100%; }
-  .pt5 .yr { animation: yr-active linear both; animation-timeline: --p2021; animation-range: cover 0% cover 100%; }
-  .pt6 .dot { animation: dot-state linear both; animation-timeline: --p2019; animation-range: cover 0% cover 100%; }
-  .pt6 .yr { animation: yr-active linear both; animation-timeline: --p2019; animation-range: cover 0% cover 100%; }
-  .pt7 .dot { animation: dot-state linear both; animation-timeline: --p2017; animation-range: cover 0% cover 100%; }
-  .pt7 .yr { animation: yr-active linear both; animation-timeline: --p2017; animation-range: cover 0% cover 100%; }
-
-  .scrubber .seg1 { animation: seg-fill linear both; animation-timeline: --p2024; animation-range: entry 0% entry 100%; }
-  .scrubber .seg2 { animation: seg-fill linear both; animation-timeline: --p2023; animation-range: entry 0% entry 100%; }
-  .scrubber .seg3 { animation: seg-fill linear both; animation-timeline: --p2022; animation-range: entry 0% entry 100%; }
-  .scrubber .seg4 { animation: seg-fill linear both; animation-timeline: --p2021; animation-range: entry 0% entry 100%; }
-  .scrubber .seg5 { animation: seg-fill linear both; animation-timeline: --p2019; animation-range: entry 0% entry 100%; }
-  .scrubber .seg6 { animation: seg-fill linear both; animation-timeline: --p2017; animation-range: entry 0% entry 100%; }
-
-  @keyframes rail-fill { from { transform: scaleY(0); } to { transform: scaleY(1); } }
-  .l5::after { animation: rail-fill linear both; animation-timeline: --p2024; animation-range: entry 0% entry 100%; }
-  .l4::after { animation: rail-fill linear both; animation-timeline: --p2023; animation-range: entry 0% entry 100%; }
-  .l3::after { animation: rail-fill linear both; animation-timeline: --p2022; animation-range: entry 0% entry 100%; }
-  .l2::after { animation: rail-fill linear both; animation-timeline: --p2021; animation-range: entry 0% entry 100%; }
-  .l1::after { animation: rail-fill linear both; animation-timeline: --p2019; animation-range: entry 0% entry 100%; }
-  .l5 .yr { animation: yr-active linear both; animation-timeline: --pnow; animation-range: cover 0% cover 100%; }
-  .l4 .yr { animation: yr-active linear both; animation-timeline: --p2024; animation-range: cover 0% cover 100%; }
-  .l3 .yr { animation: yr-active linear both; animation-timeline: --p2023; animation-range: cover 0% cover 100%; }
-  .l2 .yr { animation: yr-active linear both; animation-timeline: --p2022; animation-range: cover 0% cover 100%; }
-  .l1 .yr { animation: yr-active linear both; animation-timeline: --p2021; animation-range: cover 0% cover 100%; }
-  .l0 .yr { animation: yr-active linear both, yr-active linear both; animation-timeline: --p2019, --p2017; animation-range: cover 0% cover 100%, cover 0% cover 100%; }
-  .panel { animation: panel-focus linear both; animation-range: cover 0% cover 100%; }
-  #pnow { animation-timeline: --pnow; }
-  #p2024 { animation-timeline: --p2024; }
-  #p2023 { animation-timeline: --p2023; }
-  #p2022 { animation-timeline: --p2022; }
-  #p2021 { animation-timeline: --p2021; }
-  #p2019 { animation-timeline: --p2019; }
-  #p2017 { animation-timeline: --p2017; }
+  .enow .entry-card { animation: card-own linear both, card-next linear forwards; animation-timeline: --enow, --e2024; animation-range: cover 0% cover 100%, cover 0% cover 100%; }
+  .enow::before { animation: dot-own linear both, dot-next linear forwards; animation-timeline: --enow, --e2024; animation-range: cover 0% cover 100%, cover 0% cover 100%; }
+  .enow .yr { animation: yr-own linear both, yr-next linear forwards; animation-timeline: --enow, --e2024; animation-range: cover 0% cover 100%, cover 0% cover 100%; }
+  .enow::after { animation: seg-next linear both; animation-timeline: --e2024; animation-range: cover 0% cover 100%; }
+  .e2024 .entry-card { animation: card-own linear both, card-next linear forwards; animation-timeline: --e2024, --e2023; animation-range: cover 0% cover 100%, cover 0% cover 100%; }
+  .e2024::before { animation: dot-own linear both, dot-next linear forwards; animation-timeline: --e2024, --e2023; animation-range: cover 0% cover 100%, cover 0% cover 100%; }
+  .e2024 .yr { animation: yr-own linear both, yr-next linear forwards; animation-timeline: --e2024, --e2023; animation-range: cover 0% cover 100%, cover 0% cover 100%; }
+  .e2024::after { animation: seg-next linear both; animation-timeline: --e2023; animation-range: cover 0% cover 100%; }
+  .e2023 .entry-card { animation: card-own linear both, card-next linear forwards; animation-timeline: --e2023, --e2022; animation-range: cover 0% cover 100%, cover 0% cover 100%; }
+  .e2023::before { animation: dot-own linear both, dot-next linear forwards; animation-timeline: --e2023, --e2022; animation-range: cover 0% cover 100%, cover 0% cover 100%; }
+  .e2023 .yr { animation: yr-own linear both, yr-next linear forwards; animation-timeline: --e2023, --e2022; animation-range: cover 0% cover 100%, cover 0% cover 100%; }
+  .e2023::after { animation: seg-next linear both; animation-timeline: --e2022; animation-range: cover 0% cover 100%; }
+  .e2022 .entry-card { animation: card-own linear both, card-next linear forwards; animation-timeline: --e2022, --e2021; animation-range: cover 0% cover 100%, cover 0% cover 100%; }
+  .e2022::before { animation: dot-own linear both, dot-next linear forwards; animation-timeline: --e2022, --e2021; animation-range: cover 0% cover 100%, cover 0% cover 100%; }
+  .e2022 .yr { animation: yr-own linear both, yr-next linear forwards; animation-timeline: --e2022, --e2021; animation-range: cover 0% cover 100%, cover 0% cover 100%; }
+  .e2022::after { animation: seg-next linear both; animation-timeline: --e2021; animation-range: cover 0% cover 100%; }
+  .e2021 .entry-card { animation: card-own linear both, card-next linear forwards; animation-timeline: --e2021, --e2019; animation-range: cover 0% cover 100%, cover 0% cover 100%; }
+  .e2021::before { animation: dot-own linear both, dot-next linear forwards; animation-timeline: --e2021, --e2019; animation-range: cover 0% cover 100%, cover 0% cover 100%; }
+  .e2021 .yr { animation: yr-own linear both, yr-next linear forwards; animation-timeline: --e2021, --e2019; animation-range: cover 0% cover 100%, cover 0% cover 100%; }
+  .e2021::after { animation: seg-next linear both; animation-timeline: --e2019; animation-range: cover 0% cover 100%; }
+  .e2019 .entry-card { animation: card-own linear both, card-next linear forwards; animation-timeline: --e2019, --e2017; animation-range: cover 0% cover 100%, cover 0% cover 100%; }
+  .e2019::before { animation: dot-own linear both, dot-next linear forwards; animation-timeline: --e2019, --e2017; animation-range: cover 0% cover 100%, cover 0% cover 100%; }
+  .e2019 .yr { animation: yr-own linear both, yr-next linear forwards; animation-timeline: --e2019, --e2017; animation-range: cover 0% cover 100%, cover 0% cover 100%; }
+  .e2019::after { animation: seg-next linear both; animation-timeline: --e2017; animation-range: cover 0% cover 100%; }
 }
 
-/* without scroll-driven animations: everything built, panels just read top to bottom */
+/* without scroll-driven animations: everything lit, the rail filled */
 @supports not (animation-timeline: view()) {
-  .layer { opacity: 1; border-style: solid; border-color: var(--border); background: var(--surface); color: var(--text); }
-  .layer .name { color: var(--fg); }
-  .scrubber .dot { background: var(--accent); border-color: var(--accent); }
+  .entry::before { border-color: var(--accent); background: var(--accent); }
+  .entry::after { transform: scaleY(1); }
 }
 
-.scrubber { display: none; }
 @media (max-width: 38rem) {
-  .scrubber { display: grid; }
-  .journey-body { grid-template-columns: 1fr; gap: 1rem; }
-  .stack { position: relative; top: auto; }
-  .layer a { min-height: 3rem; padding: .5rem .8rem; }
-  .layer .sub { font-size: .72rem; }
-  .scrubber { top: 4rem; padding: .9rem .1rem .7rem; }
-  .scrubber .role { display: none; }
-  .panel { scroll-margin-top: 8rem; }
+  .tl { padding-left: 4.5rem; }
+  .tl::before { left: 3.35rem; }
+  .entry .yr { right: calc(100% + 2rem); font-size: .68rem; }
+  .entry-head { grid-template-columns: 1fr; row-gap: .4rem; padding: .75rem .9rem .4rem; }
+  .entry-head .meta { justify-self: start; }
+  .entry-inner { padding: 0 .9rem .9rem; }
 }
 
 /* ==========================================================================
