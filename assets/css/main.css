@@ -383,105 +383,119 @@ h1, h2, h3 { color: var(--fg); font-weight: 600; }
 }
 
 /* ==========================================================================
-   Journey (CSS-only year scrubber: radio inputs + sibling selectors)
+   At a glance: bento, experience rows, skill chips
    ========================================================================== */
-.journey-lede { margin: 0 0 2rem; max-width: 40rem; color: var(--muted); }
-
-.journey .year {
-  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
-  overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+.rows { margin: 0; padding: 0; list-style: none; }
+.rows li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas: "org when" "title when";
+  column-gap: .75rem;
+  padding: .6rem 0;
+  border-top: 1px solid var(--border);
+}
+.rows li:last-child { border-bottom: 1px solid var(--border); }
+.row-org { grid-area: org; font-size: .78rem; color: var(--muted); }
+.row-title { grid-area: title; font-weight: 500; color: var(--fg); font-size: .95rem; }
+.row-title a { color: inherit; text-decoration: none; border-bottom: 1px solid color-mix(in srgb, currentColor 30%, transparent); }
+.row-title a:hover { border-bottom-color: currentColor; }
+.row-when {
+  grid-area: when; align-self: center;
+  font: 400 .76rem/1.4 var(--font-mono); font-variant-numeric: tabular-nums;
+  color: var(--muted); white-space: nowrap;
 }
 
-.scrubber {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  margin: 0 0 1.75rem;
-  padding: 1.3rem .25rem 1.15rem;
-  border-radius: var(--radius);
-  background: var(--surface);
+.chip-group { margin: 0 0 .9rem; }
+.chip-label { display: block; margin: 0 0 .4rem; font-size: .78rem; color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: .35rem; margin: 0; padding: 0; list-style: none; }
+.chips li {
+  padding: .22rem .6rem;
+  border-radius: 999px;
   border: 1px solid var(--border);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: var(--surface);
+  font-size: .78rem;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .25rem 2rem; }
+@media (max-width: 38rem) {
+  .skills-grid { grid-template-columns: 1fr; }
+}
+
+/* ==========================================================================
+   Journey: scroll-driven. Each panel owns a view timeline; the sticky stack and the
+   year strip animate against those timelines. No JavaScript.
+   ========================================================================== */
+.journey { timeline-scope: --p2017, --p2019, --p2021, --p2022, --p2023, --p2024, --pnow; }
+.journey-lede { margin: 0 0 1.5rem; max-width: 40rem; color: var(--muted); }
+
+/* year strip: sticky under the header */
+.scrubber {
+  position: sticky;
+  top: 4.4rem;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin: 0 0 1.5rem;
+  padding: 1.1rem .25rem .9rem;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 .scrubber .rail {
-  position: absolute; left: 10%; right: 10%; top: calc(1.3rem + 8px); height: 2px;
-  background: var(--border-2);
-  border-radius: 2px;
+  position: absolute; left: calc(100% / 14); right: calc(100% / 14); top: calc(1.1rem + 8px); height: 2px;
+  background: var(--border-2); border-radius: 2px;
 }
-.scrubber .fill {
-  display: block; height: 100%; width: 100%;
+.scrubber .seg {
+  position: absolute; top: 0; height: 100%;
+  width: calc(100% / 6);
   background: linear-gradient(90deg, var(--accent), var(--accent-2));
-  box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 60%, transparent);
-  border-radius: 2px;
-  transition: width .5s var(--ease);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 55%, transparent);
+  transform-origin: left center;
+  transform: scaleX(1);
 }
-.scrubber label {
-  position: relative; display: flex; flex-direction: column; align-items: center; gap: .45rem;
-  min-width: 0; padding: 0 .2rem; cursor: pointer; text-align: center;
+.scrubber .seg1 { left: calc(100% / 6 * 0); }
+.scrubber .seg2 { left: calc(100% / 6 * 1); }
+.scrubber .seg3 { left: calc(100% / 6 * 2); }
+.scrubber .seg4 { left: calc(100% / 6 * 3); }
+.scrubber .seg5 { left: calc(100% / 6 * 4); }
+.scrubber .seg6 { left: calc(100% / 6 * 5); }
+
+.scrubber .pt {
+  position: relative; display: flex; flex-direction: column; align-items: center; gap: .4rem;
+  min-width: 0; padding: 0 .15rem; text-decoration: none; text-align: center;
 }
 .scrubber .dot {
-  width: 18px; height: 18px; border-radius: 50%;
+  width: 16px; height: 16px; border-radius: 50%;
   border: 2px solid var(--border-2); background: var(--bg-2);
-  transition: border-color .2s var(--ease), background .2s var(--ease), transform .2s var(--ease), box-shadow .2s var(--ease);
+  transition: border-color .2s var(--ease);
 }
-.scrubber label:hover .dot { border-color: var(--accent); transform: scale(1.1); }
-.scrubber .yr { font: 500 .875rem/1 var(--font-mono); font-variant-numeric: tabular-nums; color: var(--muted); transition: color .2s; }
-.scrubber .role { font-size: .72rem; line-height: 1.2; color: var(--muted); min-height: 1.2em; overflow-wrap: anywhere; }
+.scrubber .pt:hover .dot { border-color: var(--accent); }
+.scrubber .yr { font: 500 .85rem/1 var(--font-mono); font-variant-numeric: tabular-nums; color: var(--muted); }
+.scrubber .role { font-size: .7rem; line-height: 1.2; color: var(--muted); min-height: 1.2em; overflow-wrap: anywhere; }
 
-#y2021:checked ~ .scrubber .fill { width: 0; }
-#y2022:checked ~ .scrubber .fill { width: 25%; }
-#y2023:checked ~ .scrubber .fill { width: 50%; }
-#y2024:checked ~ .scrubber .fill { width: 75%; }
-#ynow:checked  ~ .scrubber .fill { width: 100%; }
-
-#y2021:checked ~ .scrubber label:nth-of-type(-n+1) .dot,
-#y2022:checked ~ .scrubber label:nth-of-type(-n+2) .dot,
-#y2023:checked ~ .scrubber label:nth-of-type(-n+3) .dot,
-#y2024:checked ~ .scrubber label:nth-of-type(-n+4) .dot,
-#ynow:checked  ~ .scrubber label:nth-of-type(-n+5) .dot { background: var(--accent); border-color: var(--accent); }
-
-#y2021:checked ~ .scrubber label:nth-of-type(1) .dot,
-#y2022:checked ~ .scrubber label:nth-of-type(2) .dot,
-#y2023:checked ~ .scrubber label:nth-of-type(3) .dot,
-#y2024:checked ~ .scrubber label:nth-of-type(4) .dot,
-#ynow:checked  ~ .scrubber label:nth-of-type(5) .dot {
-  transform: scale(1.25);
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  border-color: transparent;
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 22%, transparent), 0 0 18px var(--glow);
-}
-#y2021:checked ~ .scrubber label:nth-of-type(1) .yr,
-#y2022:checked ~ .scrubber label:nth-of-type(2) .yr,
-#y2023:checked ~ .scrubber label:nth-of-type(3) .yr,
-#y2024:checked ~ .scrubber label:nth-of-type(4) .yr,
-#ynow:checked  ~ .scrubber label:nth-of-type(5) .yr { color: var(--fg); }
-
-#y2021:focus-visible ~ .scrubber label[for="y2021"] .dot,
-#y2022:focus-visible ~ .scrubber label[for="y2022"] .dot,
-#y2023:focus-visible ~ .scrubber label[for="y2023"] .dot,
-#y2024:focus-visible ~ .scrubber label[for="y2024"] .dot,
-#ynow:focus-visible  ~ .scrubber label[for="ynow"]  .dot { outline: 2px solid var(--accent); outline-offset: 3px; }
-
+/* stack + panels */
 .journey-body {
   display: grid;
-  grid-template-columns: 16.5rem 1fr;
+  grid-template-columns: 20.25rem 1fr;
   gap: 1.5rem;
   align-items: start;
 }
-
 .stack {
   --g: .55rem;
-  position: relative;
+  position: sticky;
+  top: 11rem;
   display: grid;
   gap: var(--g);
   margin: 0;
-  padding: 0 0 0 1.7rem;
+  padding: 0 0 0 5.2rem;
   list-style: none;
-  align-content: start;
 }
 .stack::before {
-  content: ""; position: absolute; left: .55rem; top: .7rem; bottom: .7rem; width: 2px;
+  content: ""; position: absolute; left: 4.05rem; top: .7rem; bottom: .7rem; width: 2px;
   background: var(--border-2); border-radius: 2px;
 }
 .layer {
@@ -490,82 +504,41 @@ h1, h2, h3 { color: var(--fg); font-weight: 600; }
   border-radius: var(--radius-sm);
   color: var(--muted);
   opacity: .7;
-  transition: background .3s var(--ease), border-color .3s var(--ease), color .3s var(--ease), opacity .3s var(--ease), box-shadow .3s var(--ease), transform .3s var(--ease);
 }
-.layer label {
+.layer a {
   display: grid;
   grid-template-columns: auto 1fr;
   grid-template-rows: auto auto;
   column-gap: .7rem;
   align-content: center;
-  min-height: 3.6rem;
+  min-height: 3.5rem;
   min-width: 0;
-  padding: .7rem .95rem;
-  cursor: pointer;
+  padding: .65rem .95rem;
+  color: inherit;
+  text-decoration: none;
 }
 .layer:hover { opacity: 1; border-color: color-mix(in srgb, var(--accent) 55%, var(--border-2)); }
+.layer .yr {
+  position: absolute; right: calc(100% + 1.95rem); top: 50%; transform: translateY(-50%); white-space: nowrap;
+  text-align: right; font: 500 .74rem/1 var(--font-mono); font-variant-numeric: tabular-nums; color: var(--muted);
+}
+.layer:not(.l0)::after {
+  content: ""; position: absolute; left: calc(-1.15rem - 1px); top: 50%; width: 2px;
+  height: calc(100% + var(--g)); transform-origin: top; transform: scaleY(0);
+  background: linear-gradient(180deg, var(--accent), var(--accent-2));
+  box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 55%, transparent);
+}
 .layer .n { grid-row: 1 / span 2; align-self: center; font: 500 .72rem/1 var(--font-mono); color: var(--muted); }
 .layer .name { font-size: .95rem; font-weight: 600; line-height: 1.2; color: inherit; }
 .layer .sub { font-size: .76rem; line-height: 1.3; min-width: 0; margin-top: .1rem; }
-.l1 { transition-delay: 0s; } .l2 { transition-delay: .06s; } .l3 { transition-delay: .12s; }
-.l4 { transition-delay: .18s; } .l5 { transition-delay: .24s; }
-
-#y2021:checked ~ .journey-body .l1,
-#y2022:checked ~ .journey-body :is(.l1, .l2),
-#y2023:checked ~ .journey-body :is(.l1, .l2, .l3),
-#y2024:checked ~ .journey-body :is(.l1, .l2, .l3, .l4),
-#ynow:checked  ~ .journey-body .layer {
-  opacity: 1;
-  border-style: solid;
-  border-color: var(--border);
-  background: var(--surface);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  color: var(--text);
+.l0 { margin-top: .35rem; }
+.layer.built, .l0 {
+  opacity: 1; border-style: solid; border-color: var(--border); background: var(--surface); color: var(--text);
 }
-#y2021:checked ~ .journey-body .l1 .name,
-#y2022:checked ~ .journey-body :is(.l1, .l2) .name,
-#y2023:checked ~ .journey-body :is(.l1, .l2, .l3) .name,
-#y2024:checked ~ .journey-body :is(.l1, .l2, .l3, .l4) .name,
-#ynow:checked  ~ .journey-body .layer .name { color: var(--fg); }
+.layer.built .name, .l0 .name { color: var(--fg); }
 
-/* the layer being built that year: gradient border + glow */
-#y2021:checked ~ .journey-body .l1,
-#y2022:checked ~ .journey-body .l2,
-#y2023:checked ~ .journey-body .l3,
-#y2024:checked ~ .journey-body .l4,
-#ynow:checked  ~ .journey-body .l5 {
-  border-color: transparent;
-  background:
-    linear-gradient(var(--bg-2), var(--bg-2)) padding-box,
-    linear-gradient(135deg, var(--accent), var(--accent-2)) border-box;
-  box-shadow: 0 12px 30px -16px var(--glow), 0 0 0 1px color-mix(in srgb, var(--accent) 25%, transparent);
-  transform: translateX(3px);
-}
-#y2021:checked ~ .journey-body .l1 .n,
-#y2022:checked ~ .journey-body .l2 .n,
-#y2023:checked ~ .journey-body .l3 .n,
-#y2024:checked ~ .journey-body .l4 .n,
-#ynow:checked  ~ .journey-body .l5 .n { color: var(--accent); }
-
-#y2021:checked ~ .journey-body .l1 label::before,
-#y2022:checked ~ .journey-body .l2 label::before,
-#y2023:checked ~ .journey-body .l3 label::before,
-#y2024:checked ~ .journey-body .l4 label::before,
-#ynow:checked  ~ .journey-body .l5 label::before {
-  content: "";
-  position: absolute;
-  left: calc(-1.15rem - 7px);
-  top: 50%;
-  width: 14px; height: 14px; margin-top: -7px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 22%, transparent), 0 0 18px var(--glow);
-  animation: pop .45s var(--ease) both;
-}
-@keyframes pop { from { transform: scale(.3); opacity: 0; } to { transform: none; opacity: 1; } }
-
-.captions {
+.panels { display: grid; gap: 2.5rem; }
+.panel {
   position: relative;
   padding: 1.4rem 1.5rem 1.5rem;
   border-radius: var(--radius);
@@ -574,23 +547,17 @@ h1, h2, h3 { color: var(--fg); font-weight: 600; }
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   overflow: hidden;
+  scroll-margin-top: 11rem;
 }
-.captions::before {
+.panel::before {
   content: "";
   position: absolute;
   inset: 0 0 auto 0;
   height: 2px;
   background: linear-gradient(90deg, var(--accent), var(--accent-2), transparent);
 }
-.captions .cap { display: none; }
-#y2021:checked ~ .journey-body .c2021,
-#y2022:checked ~ .journey-body .c2022,
-#y2023:checked ~ .journey-body .c2023,
-#y2024:checked ~ .journey-body .c2024,
-#ynow:checked  ~ .journey-body .cnow { display: block; animation: fade .35s var(--ease) both; }
-@keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
-.cap h3 { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .6rem; margin: 0 0 .75rem; font-size: 1.2rem; letter-spacing: -.02em; }
-.cap .meta {
+.panel h3 { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .6rem; margin: 0 0 .4rem; font-size: 1.2rem; letter-spacing: -.02em; }
+.panel .meta {
   display: inline-block;
   max-width: 100%;
   margin: 0;
@@ -604,14 +571,159 @@ h1, h2, h3 { color: var(--fg); font-weight: 600; }
   color: var(--accent);
   background: color-mix(in srgb, var(--accent) 12%, transparent);
 }
-.cap p { margin: 0 0 .75rem; font-size: .96rem; }
-.cap p:last-child { margin-bottom: 0; }
+.cap-tag { margin: 0 0 .8rem; color: var(--muted); font-size: .92rem; }
+.cap-list { margin: 0; padding: 0; list-style: none; display: grid; gap: .5rem; }
+.cap-list li { position: relative; padding-left: 1.05rem; font-size: .92rem; line-height: 1.45; }
+.cap-list li::before {
+  content: ""; position: absolute; left: 0; top: .58em;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+}
+.cap-list strong { color: var(--fg); font-weight: 600; }
 
-.journey-foot { margin: 1.75rem 0 0; font-size: .9375rem; color: var(--muted); }
+/* ---- scroll-driven state (progressive enhancement) ----
+   The page starts at "now" and scrolls back in time: a layer is built before its year's
+   panel, highlighted while that panel is centred, and comes apart after it. */
+@supports (animation-timeline: view()) {
+  #pnow { view-timeline-name: --pnow; view-timeline-axis: block; }
+  #p2024 { view-timeline-name: --p2024; view-timeline-axis: block; }
+  #p2023 { view-timeline-name: --p2023; view-timeline-axis: block; }
+  #p2022 { view-timeline-name: --p2022; view-timeline-axis: block; }
+  #p2021 { view-timeline-name: --p2021; view-timeline-axis: block; }
+  #p2019 { view-timeline-name: --p2019; view-timeline-axis: block; }
+  #p2017 { view-timeline-name: --p2017; view-timeline-axis: block; }
 
+  .panel { min-height: 42vh; }
+  .panels { padding-bottom: 20vh; }
+
+  @keyframes layer-state {
+    0%, 37% { opacity: 1; border-style: solid; border-color: var(--border); background: var(--surface); color: var(--text); box-shadow: none; transform: none; }
+    38%, 62% { opacity: 1; border-style: solid; border-color: transparent;
+      background: linear-gradient(var(--bg-2), var(--bg-2)) padding-box, linear-gradient(135deg, var(--accent), var(--accent-2)) border-box;
+      box-shadow: 0 12px 30px -16px var(--glow), 0 0 0 1px color-mix(in srgb, var(--accent) 25%, transparent);
+      transform: translateX(3px); color: var(--text); }
+    63%, 100% { opacity: .7; border-style: dashed; border-color: var(--border-2); background: var(--bg); color: var(--muted); box-shadow: none; transform: none; }
+  }
+  @keyframes layer-name { 0%, 62% { color: var(--fg); } 63%, 100% { color: var(--muted); } }
+  @keyframes layer-n { 0%, 37%, 63%, 100% { color: var(--muted); } 38%, 62% { color: var(--accent); } }
+  @keyframes base-state {
+    0%, 37%, 63%, 100% { opacity: 1; border-style: solid; border-color: var(--border); background: var(--surface); color: var(--text); box-shadow: none; transform: none; }
+    38%, 62% { opacity: 1; border-style: solid; border-color: transparent;
+      background: linear-gradient(var(--bg-2), var(--bg-2)) padding-box, linear-gradient(135deg, var(--accent), var(--accent-2)) border-box;
+      box-shadow: 0 12px 30px -16px var(--glow), 0 0 0 1px color-mix(in srgb, var(--accent) 25%, transparent);
+      transform: translateX(3px); color: var(--text); }
+  }
+  @keyframes probe { 0%, 37%, 63%, 100% { opacity: 0; transform: scale(.3); } 38%, 62% { opacity: 1; transform: none; } }
+  @keyframes dot-state {
+    0%, 37% { border-color: var(--border-2); background: var(--bg-2); transform: none; box-shadow: none; }
+    38%, 62% { transform: scale(1.25); background: linear-gradient(135deg, var(--accent), var(--accent-2)); border-color: transparent;
+               box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 22%, transparent), 0 0 18px var(--glow); }
+    63%, 100% { border-color: var(--accent); background: var(--accent); transform: none; box-shadow: none; }
+  }
+  @keyframes yr-active { 0%, 37%, 63%, 100% { color: var(--muted); } 38%, 62% { color: var(--fg); } }
+  @keyframes seg-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  @keyframes panel-focus { 0%, 100% { opacity: .55; } 30%, 70% { opacity: 1; } }
+
+  .l5 { animation: layer-state linear both; animation-timeline: --pnow; animation-range: cover 0% cover 100%; }
+  .l5 .name { animation: layer-name linear both; animation-timeline: --pnow; animation-range: cover 0% cover 100%; }
+  .l5 .n { animation: layer-n linear both; animation-timeline: --pnow; animation-range: cover 0% cover 100%; }
+  .l4 { animation: layer-state linear both; animation-timeline: --p2024; animation-range: cover 0% cover 100%; }
+  .l4 .name { animation: layer-name linear both; animation-timeline: --p2024; animation-range: cover 0% cover 100%; }
+  .l4 .n { animation: layer-n linear both; animation-timeline: --p2024; animation-range: cover 0% cover 100%; }
+  .l3 { animation: layer-state linear both; animation-timeline: --p2023; animation-range: cover 0% cover 100%; }
+  .l3 .name { animation: layer-name linear both; animation-timeline: --p2023; animation-range: cover 0% cover 100%; }
+  .l3 .n { animation: layer-n linear both; animation-timeline: --p2023; animation-range: cover 0% cover 100%; }
+  .l2 { animation: layer-state linear both; animation-timeline: --p2022; animation-range: cover 0% cover 100%; }
+  .l2 .name { animation: layer-name linear both; animation-timeline: --p2022; animation-range: cover 0% cover 100%; }
+  .l2 .n { animation: layer-n linear both; animation-timeline: --p2022; animation-range: cover 0% cover 100%; }
+  .l1 { animation: layer-state linear both; animation-timeline: --p2021; animation-range: cover 0% cover 100%; }
+  .l1 .name { animation: layer-name linear both; animation-timeline: --p2021; animation-range: cover 0% cover 100%; }
+  .l1 .n { animation: layer-n linear both; animation-timeline: --p2021; animation-range: cover 0% cover 100%; }
+
+  .l0 { animation: base-state linear both, base-state linear both; animation-timeline: --p2019, --p2017; animation-range: cover 0% cover 100%, cover 0% cover 100%; }
+  .l0 .n { animation: layer-n linear both, layer-n linear both; animation-timeline: --p2019, --p2017; animation-range: cover 0% cover 100%, cover 0% cover 100%; }
+
+  .layer::before {
+    content: "";
+    position: absolute;
+    left: calc(-1.15rem - 1px - 7px);
+    top: 50%;
+    width: 14px; height: 14px; margin-top: -7px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 22%, transparent), 0 0 18px var(--glow);
+    opacity: 0;
+    animation: probe linear both;
+    animation-range: cover 0% cover 100%;
+  }
+  .l5::before { animation-timeline: --pnow; }
+  .l4::before { animation-timeline: --p2024; }
+  .l3::before { animation-timeline: --p2023; }
+  .l2::before { animation-timeline: --p2022; }
+  .l1::before { animation-timeline: --p2021; }
+
+  .l0::before { animation: probe linear both, probe linear both; animation-timeline: --p2019, --p2017; animation-range: cover 0% cover 100%, cover 0% cover 100%; }
+
+  /* year strip: now on the left, the rail fills towards 2017 as you scroll back */
+  .pt1 .dot { animation: dot-state linear both; animation-timeline: --pnow; animation-range: cover 0% cover 100%; }
+  .pt1 .yr { animation: yr-active linear both; animation-timeline: --pnow; animation-range: cover 0% cover 100%; }
+  .pt2 .dot { animation: dot-state linear both; animation-timeline: --p2024; animation-range: cover 0% cover 100%; }
+  .pt2 .yr { animation: yr-active linear both; animation-timeline: --p2024; animation-range: cover 0% cover 100%; }
+  .pt3 .dot { animation: dot-state linear both; animation-timeline: --p2023; animation-range: cover 0% cover 100%; }
+  .pt3 .yr { animation: yr-active linear both; animation-timeline: --p2023; animation-range: cover 0% cover 100%; }
+  .pt4 .dot { animation: dot-state linear both; animation-timeline: --p2022; animation-range: cover 0% cover 100%; }
+  .pt4 .yr { animation: yr-active linear both; animation-timeline: --p2022; animation-range: cover 0% cover 100%; }
+  .pt5 .dot { animation: dot-state linear both; animation-timeline: --p2021; animation-range: cover 0% cover 100%; }
+  .pt5 .yr { animation: yr-active linear both; animation-timeline: --p2021; animation-range: cover 0% cover 100%; }
+  .pt6 .dot { animation: dot-state linear both; animation-timeline: --p2019; animation-range: cover 0% cover 100%; }
+  .pt6 .yr { animation: yr-active linear both; animation-timeline: --p2019; animation-range: cover 0% cover 100%; }
+  .pt7 .dot { animation: dot-state linear both; animation-timeline: --p2017; animation-range: cover 0% cover 100%; }
+  .pt7 .yr { animation: yr-active linear both; animation-timeline: --p2017; animation-range: cover 0% cover 100%; }
+
+  .scrubber .seg1 { animation: seg-fill linear both; animation-timeline: --p2024; animation-range: entry 0% entry 100%; }
+  .scrubber .seg2 { animation: seg-fill linear both; animation-timeline: --p2023; animation-range: entry 0% entry 100%; }
+  .scrubber .seg3 { animation: seg-fill linear both; animation-timeline: --p2022; animation-range: entry 0% entry 100%; }
+  .scrubber .seg4 { animation: seg-fill linear both; animation-timeline: --p2021; animation-range: entry 0% entry 100%; }
+  .scrubber .seg5 { animation: seg-fill linear both; animation-timeline: --p2019; animation-range: entry 0% entry 100%; }
+  .scrubber .seg6 { animation: seg-fill linear both; animation-timeline: --p2017; animation-range: entry 0% entry 100%; }
+
+  @keyframes rail-fill { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+  .l5::after { animation: rail-fill linear both; animation-timeline: --p2024; animation-range: entry 0% entry 100%; }
+  .l4::after { animation: rail-fill linear both; animation-timeline: --p2023; animation-range: entry 0% entry 100%; }
+  .l3::after { animation: rail-fill linear both; animation-timeline: --p2022; animation-range: entry 0% entry 100%; }
+  .l2::after { animation: rail-fill linear both; animation-timeline: --p2021; animation-range: entry 0% entry 100%; }
+  .l1::after { animation: rail-fill linear both; animation-timeline: --p2019; animation-range: entry 0% entry 100%; }
+  .l5 .yr { animation: yr-active linear both; animation-timeline: --pnow; animation-range: cover 0% cover 100%; }
+  .l4 .yr { animation: yr-active linear both; animation-timeline: --p2024; animation-range: cover 0% cover 100%; }
+  .l3 .yr { animation: yr-active linear both; animation-timeline: --p2023; animation-range: cover 0% cover 100%; }
+  .l2 .yr { animation: yr-active linear both; animation-timeline: --p2022; animation-range: cover 0% cover 100%; }
+  .l1 .yr { animation: yr-active linear both; animation-timeline: --p2021; animation-range: cover 0% cover 100%; }
+  .l0 .yr { animation: yr-active linear both, yr-active linear both; animation-timeline: --p2019, --p2017; animation-range: cover 0% cover 100%, cover 0% cover 100%; }
+  .panel { animation: panel-focus linear both; animation-range: cover 0% cover 100%; }
+  #pnow { animation-timeline: --pnow; }
+  #p2024 { animation-timeline: --p2024; }
+  #p2023 { animation-timeline: --p2023; }
+  #p2022 { animation-timeline: --p2022; }
+  #p2021 { animation-timeline: --p2021; }
+  #p2019 { animation-timeline: --p2019; }
+  #p2017 { animation-timeline: --p2017; }
+}
+
+/* without scroll-driven animations: everything built, panels just read top to bottom */
+@supports not (animation-timeline: view()) {
+  .layer { opacity: 1; border-style: solid; border-color: var(--border); background: var(--surface); color: var(--text); }
+  .layer .name { color: var(--fg); }
+  .scrubber .dot { background: var(--accent); border-color: var(--accent); }
+}
+
+.scrubber { display: none; }
 @media (max-width: 38rem) {
+  .scrubber { display: grid; }
   .journey-body { grid-template-columns: 1fr; gap: 1rem; }
+  .stack { position: static; }
+  .scrubber { top: 4rem; padding: .9rem .1rem .7rem; }
   .scrubber .role { display: none; }
+  .panel { scroll-margin-top: 8rem; }
 }
 
 /* ==========================================================================

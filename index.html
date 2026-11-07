@@ -8,11 +8,6 @@ layout: default
   <p class="eyebrow">{{ p.title }} &middot; {{ p.company }} &middot; {{ p.city }}</p>
   <div class="bio">
     <p class="lead">I'm a {{ p.title }} at <a href="{{ p.company_url }}">{{ p.company }}</a>, where {{ p.pitch_html }}</p>
-    <p>
-      Over five years at Needl I've built every layer an answer passes through, from the connectors that bring
-      documents in to the agents that now do the answering. These days I spend most of my time on agent
-      harnesses, context engineering and evals, and on making an engineering team work well with AI coding agents.
-    </p>
   </div>
   <ul class="links">
     <li><a href="https://github.com/{{ p.github }}">{% include icon.html name="github" %}GitHub</a></li>
@@ -22,88 +17,122 @@ layout: default
   </ul>
 </section>
 
+
 <section class="section journey" id="journey" aria-labelledby="journey-title">
   <h2 class="section-title" id="journey-title">Journey</h2>
-  <p class="journey-lede">
-    Five years at Needl, one stack. I've built, in order, every layer a question passes through on its way to
-    an answer. Pick a year, or a layer, to see what existed then and what I was building.
-  </p>
+  <p class="journey-lede">Today first, then back one layer at a time to where it started. Scroll, or jump to a year.</p>
 
-  <input class="year" type="radio" name="year" id="y2021" aria-label="2021, Data Engineer">
-  <input class="year" type="radio" name="year" id="y2022" aria-label="2022, ML Engineer">
-  <input class="year" type="radio" name="year" id="y2023" aria-label="2023">
-  <input class="year" type="radio" name="year" id="y2024" aria-label="2024, Senior ML Engineer">
-  <input class="year" type="radio" name="year" id="ynow" aria-label="2025 to now" checked>
-
-  <div class="scrubber">
-    <span class="rail" aria-hidden="true"><span class="fill"></span></span>
-    <label for="y2021"><span class="dot"></span><span class="yr">2021</span><span class="role">Data Engineer</span></label>
-    <label for="y2022"><span class="dot"></span><span class="yr">2022</span><span class="role">ML Engineer</span></label>
-    <label for="y2023"><span class="dot"></span><span class="yr">2023</span><span class="role"></span></label>
-    <label for="y2024"><span class="dot"></span><span class="yr">2024</span><span class="role">Senior ML Engineer</span></label>
-    <label for="ynow"><span class="dot"></span><span class="yr">now</span><span class="role"></span></label>
-  </div>
+  <nav class="scrubber" aria-label="Years (phone)">
+    <span class="rail" aria-hidden="true"><span class="seg seg1"></span><span class="seg seg2"></span><span class="seg seg3"></span><span class="seg seg4"></span><span class="seg seg5"></span><span class="seg seg6"></span></span>
+    <a class="pt pt1" href="#pnow"><span class="dot"></span><span class="yr">now</span><span class="role"></span></a>
+    <a class="pt pt2" href="#p2024"><span class="dot"></span><span class="yr">2024</span><span class="role">Senior ML Engineer</span></a>
+    <a class="pt pt3" href="#p2023"><span class="dot"></span><span class="yr">2023</span><span class="role"></span></a>
+    <a class="pt pt4" href="#p2022"><span class="dot"></span><span class="yr">2022</span><span class="role">ML Engineer</span></a>
+    <a class="pt pt5" href="#p2021"><span class="dot"></span><span class="yr">2021</span><span class="role">Data Engineer</span></a>
+    <a class="pt pt6" href="#p2019"><span class="dot"></span><span class="yr">2019</span><span class="role">GSoC</span></a>
+    <a class="pt pt7" href="#p2017"><span class="dot"></span><span class="yr">2017</span><span class="role">IIT Dharwad</span></a>
+  </nav>
 
   <div class="journey-body">
-    <ol class="stack" aria-label="The layers a question passes through, newest on top; each opens its year">
-      <li class="layer l5"><label for="ynow"><span class="n">5</span><span class="name">Agents</span><span class="sub">harness, LLM layer, evals</span></label></li>
-      <li class="layer l4"><label for="y2024"><span class="n">4</span><span class="name">Answers</span><span class="sub">AskNeedl, retrieval to generation</span></label></li>
-      <li class="layer l3"><label for="y2023"><span class="n">3</span><span class="name">Document AI</span><span class="sub">query understanding, summaries</span></label></li>
-      <li class="layer l2"><label for="y2022"><span class="n">2</span><span class="name">Search</span><span class="sub">Elasticsearch over filings, calls</span></label></li>
-      <li class="layer l1"><label for="y2021"><span class="n">1</span><span class="name">Connectors</span><span class="sub">mail, drives, chat, the web</span></label></li>
+    <ol class="stack" aria-label="The layers a question passes through, newest on top">
+      <li class="layer l5"><a href="#pnow"><span class="yr">now</span><span class="n">5</span><span class="name">Agents</span><span class="sub">harness, LLM layer, evals</span></a></li>
+      <li class="layer l4"><a href="#p2024"><span class="yr">2024</span><span class="n">4</span><span class="name">Answers</span><span class="sub">AskNeedl, retrieval to generation</span></a></li>
+      <li class="layer l3"><a href="#p2023"><span class="yr">2023</span><span class="n">3</span><span class="name">Document AI</span><span class="sub">query understanding, summaries</span></a></li>
+      <li class="layer l2"><a href="#p2022"><span class="yr">2022</span><span class="n">2</span><span class="name">Search</span><span class="sub">Elasticsearch over filings, calls</span></a></li>
+      <li class="layer l1"><a href="#p2021"><span class="yr">2021</span><span class="n">1</span><span class="name">Connectors</span><span class="sub">mail, drives, chat, the web</span></a></li>
+      <li class="layer l0"><a href="#p2017"><span class="yr">2017&ndash;19</span><span class="n">0</span><span class="name">Foundations</span><span class="sub">IIT Dharwad, open source, GSoC</span></a></li>
     </ol>
 
-    <div class="captions">
-      <article class="cap c2021">
-        <h3>Connectors <span class="meta">2021 &middot; Data Engineer</span></h3>
-        <p>
-          I joined Needl on the data side. The platform pulls in mail, drives, chat and the public web; I built the
-          Microsoft Teams integration, a public-source crawler and the RSS pipeline, then hardened the Gmail, Google
-          Drive, Outlook and Telegram connectors with resumable state, throttling and backoff.
-        </p>
-        <p>Every answer starts here. If the document never arrives, nothing downstream matters.</p>
-      </article>
-      <article class="cap c2022">
-        <h3>Search <span class="meta">2022 &middot; ML Engineer</span></h3>
-        <p>
-          I took over Needl's Elasticsearch search. First the search API moved from Node.js to Python; then proximity
-          search, synonym and ticker expansion, spell correction, highlighting and multi-index querying over filings,
-          earnings calls and regulator data, with a regression framework that checks results against golden responses.
-        </p>
-      </article>
-      <article class="cap c2023">
-        <h3>Document AI <span class="meta">2023 &middot; ML Engineer</span></h3>
-        <p>
-          The system learned to read. I added LLM-based query understanding (which companies, sources and dates a
-          question is about), earnings-call summarization with sentence-level references mapped to PDF bounding boxes,
-          the job service and table extraction behind it, and near-duplicate detection for news.
-        </p>
-      </article>
-      <article class="cap c2024">
-        <h3>Answers <span class="meta">2024 &middot; Senior ML Engineer from Aug</span></h3>
-        <p>
-          I joined AskNeedl, Needl's answer engine, and became its primary engineer: rebuilt the pipeline on Haystack,
-          fine-tuned cross-encoder rerankers as the context filter, gated every model and prompt change on benchmarks,
-          added web search and an answer-quality signal, and built its first multi-step agentic mode.
-        </p>
-      </article>
-      <article class="cap cnow">
+    <div class="panels">
+      <article class="panel" id="pnow">
         <h3>Agents <span class="meta">2025&ndash;now &middot; Senior ML Engineer</span></h3>
-        <p>
-          I turned the answer pipeline into Needl's agent platform: config-driven agents over a shared tool registry,
-          skills that load context only when needed, tool-call budgets, per-fragment citations, an eval framework with
-          LLM graders, and Langfuse tracing. Alongside it, the shared LLM layer over OpenAI, Azure OpenAI, Gemini and
-          Claude, and text-to-SQL agents with input guards and read-only SQL safety.
-        </p>
-        <p>One loop now runs sub-minute chat and twenty-minute due-diligence reports.</p>
+        <p class="cap-tag">Turning the answer pipeline into the agent platform.</p>
+        <ul class="cap-list">
+          <li><strong>Agent harness:</strong> config-driven agents, a shared tool registry, skills, tool-call budgets, citations, tracing</li>
+          <li><strong>LLM layer:</strong> OpenAI, Azure OpenAI, Gemini and Claude behind one interface, with fallback, retries and cost tracking</li>
+          <li><strong>Evals &amp; guardrails:</strong> LLM graders, nightly regression gates, input guards, read-only SQL for text-to-SQL agents</li>
+          <li><strong>AI-native engineering:</strong> Claude Code skills for deploys, alert triage and agent-session debugging</li>
+          <li><strong>One loop</strong> runs sub-minute chat and twenty-minute due-diligence reports</li>
+        </ul>
+      </article>
+      <article class="panel" id="p2024">
+        <h3>Answers <span class="meta">2024 &middot; Senior ML Engineer from Aug</span></h3>
+        <p class="cap-tag">Primary engineer on AskNeedl, the answer engine.</p>
+        <ul class="cap-list">
+          <li><strong>Rebuilt</strong> the pipeline on Haystack</li>
+          <li><strong>Fine-tuned</strong> cross-encoder rerankers as the context filter</li>
+          <li><strong>Gated</strong> every model and prompt change on benchmarks</li>
+          <li><strong>Shipped</strong> the first multi-step agentic mode</li>
+        </ul>
+      </article>
+      <article class="panel" id="p2023">
+        <h3>Document AI <span class="meta">2023 &middot; ML Engineer</span></h3>
+        <p class="cap-tag">Teaching the system to read.</p>
+        <ul class="cap-list">
+          <li><strong>Query understanding:</strong> an LLM extracts the companies, sources and dates a question is about</li>
+          <li><strong>Earnings-call summaries</strong> with sentence-level references mapped to PDF regions</li>
+          <li><strong>Table extraction,</strong> the job service behind it, and near-duplicate detection for news</li>
+        </ul>
+      </article>
+      <article class="panel" id="p2022">
+        <h3>Search <span class="meta">2022 &middot; ML Engineer</span></h3>
+        <p class="cap-tag">Owning the search layer over filings and earnings calls.</p>
+        <ul class="cap-list">
+          <li><strong>Moved</strong> the search API from Node.js to Python</li>
+          <li><strong>Added</strong> proximity search, synonym and ticker expansion, spell correction, multi-index querying</li>
+          <li><strong>Guarded</strong> it with a regression framework against golden responses</li>
+        </ul>
+      </article>
+      <article class="panel" id="p2021">
+        <h3>Connectors <span class="meta">2021 &middot; Data Engineer</span></h3>
+        <p class="cap-tag">Getting the documents in.</p>
+        <ul class="cap-list">
+          <li><strong>Built</strong> the Microsoft Teams integration, a public-source crawler and the RSS pipeline</li>
+          <li><strong>Hardened</strong> the Gmail, Google Drive, Outlook and Telegram connectors: resumable state, throttling, backoff</li>
+          <li><strong>Why it matters:</strong> if the document never arrives, nothing downstream does</li>
+        </ul>
+      </article>
+      <article class="panel" id="p2019">
+        <h3>Google Summer of Code <span class="meta">2019 &middot; coala</span></h3>
+        <p class="cap-tag">A summer on an open-source static-analysis framework.</p>
+        <ul class="cap-list">
+          <li><strong>Reworked</strong> coala's action system so analysis plugins can define their own fixes</li>
+          <li><strong>Added</strong> support for suggesting several alternative patches</li>
+          <li><strong>Wrote</strong> an <a href="#writing">eight-part log</a> and the <a href="https://github.com/coala/projects/blob/master/_reports/akshatkarani.md">final report</a></li>
+        </ul>
+      </article>
+      <article class="panel" id="p2017">
+        <h3>IIT Dharwad <span class="meta">2017&ndash;2021 &middot; B.Tech, Computer Science</span></h3>
+        <p class="cap-tag">Where it started.</p>
+        <ul class="cap-list">
+          <li><strong>Studied</strong> Computer Science and Engineering, graduating in 2021</li>
+          <li><strong>Found</strong> open source through coala, a static-analysis framework, and kept contributing</li>
+          <li><strong>Mentored</strong> at the campus Open Source Society and helped freshers settle in</li>
+        </ul>
       </article>
     </div>
   </div>
+</section>
 
-  <p class="journey-foot">
-    Before Needl: a B.Tech in Computer Science at IIT Dharwad (2017&ndash;2021) and Google Summer of Code 2019 with
-    <a href="https://github.com/coala/coala">coala</a>, which is where the writing below starts.
-  </p>
+<section class="section" id="experience" aria-labelledby="experience-title">
+  <h2 class="section-title" id="experience-title">Experience</h2>
+  <ol class="rows">
+    {% for r in p.roles reversed %}
+    <li><span class="row-org">{{ p.company }}</span><span class="row-title">{{ r.title }}</span><span class="row-when">{{ r.label }}</span></li>
+    {% endfor %}
+  </ol>
+</section>
+
+<section class="section" id="skills" aria-labelledby="skills-title">
+  <h2 class="section-title" id="skills-title">Skills</h2>
+  <div class="skills-grid">
+    {% for g in p.skills %}
+    <div class="chip-group">
+      <span class="chip-label">{{ g.group }}</span>
+      <ul class="chips">{% for it in g.items %}<li>{{ it }}</li>{% endfor %}</ul>
+    </div>
+    {% endfor %}
+  </div>
 </section>
 
 <section class="section" id="writing" aria-labelledby="writing-title">

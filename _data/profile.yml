@@ -21,9 +21,75 @@ roles:
 - title: Data Engineer
   from: 2021-06
   to: 2022-04
+  label: Jun 2021 – Apr 2022
 - title: ML Engineer
   from: 2022-05
   to: 2024-07
+  label: May 2022 – Jul 2024
 - title: Senior ML Engineer
   from: 2024-08
   to: null
+  label: Aug 2024 – now
+skills:
+- group: Agents & LLMs
+  items:
+  - agent harness design
+  - multi-agent orchestration
+  - tool calling
+  - MCP
+  - context engineering
+  - structured outputs
+  - OpenAI
+  - Azure OpenAI
+  - Gemini
+  - Claude
+- group: Evals & observability
+  items:
+  - LLM-as-judge graders
+  - golden datasets
+  - regression gates
+  - benchmarking
+  - Langfuse
+  - OpenTelemetry
+  - Prometheus
+- group: Safety & reliability
+  items:
+  - prompt-injection guards
+  - text-to-SQL safety
+  - sandboxed code execution
+  - provider fallback
+  - cost tracking
+- group: Retrieval & ML
+  items:
+  - Elasticsearch
+  - cross-encoder reranking
+  - citation grounding
+  - query understanding
+  - PyTorch
+  - sentence-transformers
+- group: Data & infra
+  items:
+  - Python
+  - FastAPI
+  - asyncio
+  - PostgreSQL
+  - Snowflake
+  - DuckDB
+  - Docker
+  - Kubernetes
+  - Helm
+  - Terraform
+  - AWS
+  - GitHub Actions
+  - Claude Code
+education:
+- org: IIT Dharwad
+  title: B.Tech, Computer Science and Engineering
+  from: 2017
+  to: 2021
+open_source:
+- org: Google Summer of Code
+  title: coala, static-analysis framework
+  from: 2019
+  to: 2019
+  url: https://github.com/coala/coala
